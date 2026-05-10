@@ -849,7 +849,7 @@
       closeCart();
       const summaryEl = document.getElementById("order-summary-items");
       summaryEl.innerHTML = cart.map(item =>
-        `<div class="flex justify-between font-body"><span class="text-brand-muted">${escapeHTML(item.name)} x${item.qty}</span><span>$${(Number(item.price) * item.qty).toFixed(2)}</span></div>`
+        `<div class="flex justify-between font-body"><span class="text-brand-muted">${escapeHTML(item.name)} (Quantity: ${item.qty})</span><span>$${(Number(item.price) * item.qty).toFixed(2)}</span></div>`
       ).join("");
       document.getElementById("order-summary-total").textContent = "$" + getCartTotal().toFixed(2);
       document.getElementById("order-overlay").classList.add("open");
@@ -915,7 +915,7 @@
             pickup_date: order.pickupDate,
             notes: (order.notes || "None").substring(0, 500),
             order_id: orderId,
-            order_items: order.items.map(i => `${i.name.substring(0, 200)} x${i.qty} — $${(i.price * i.qty).toFixed(2)}`).join("\n").substring(0, 5000),
+            order_items: order.items.map(i => `${i.name.substring(0, 200)} (Quantity: ${i.qty}) — $${(i.price * i.qty).toFixed(2)}`).join("\n").substring(0, 5000),
             order_total: "$" + order.total.toFixed(2)
           }, EMAILJS_CONFIG.publicKey);
         }
