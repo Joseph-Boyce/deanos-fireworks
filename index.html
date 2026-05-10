@@ -66,10 +66,132 @@
       outline: 2px solid #DC2626;
       outline-offset: 2px;
     }
+    /* Scroll reveal animations */
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-left {
+      opacity: 0;
+      transform: translateX(-40px);
+      transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+    }
+    .reveal-left.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    .reveal-right {
+      opacity: 0;
+      transform: translateX(40px);
+      transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+    }
+    .reveal-right.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    .reveal-scale {
+      opacity: 0;
+      transform: scale(0.9);
+      transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+    }
+    .reveal-scale.visible {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    /* Stagger children */
+    .stagger-children > .reveal:nth-child(1) { transition-delay: 0ms; }
+    .stagger-children > .reveal:nth-child(2) { transition-delay: 60ms; }
+    .stagger-children > .reveal:nth-child(3) { transition-delay: 120ms; }
+    .stagger-children > .reveal:nth-child(4) { transition-delay: 180ms; }
+    .stagger-children > .reveal:nth-child(5) { transition-delay: 240ms; }
+    .stagger-children > .reveal:nth-child(6) { transition-delay: 300ms; }
+    .stagger-children > .reveal:nth-child(7) { transition-delay: 360ms; }
+    .stagger-children > .reveal:nth-child(8) { transition-delay: 420ms; }
+
+    /* Cart item slide-in */
+    @keyframes slideInRight {
+      from { opacity: 0; transform: translateX(60px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    .cart-item-enter {
+      animation: slideInRight 0.35s ease-out forwards;
+    }
+
+    /* Cart item remove */
+    @keyframes slideOutLeft {
+      from { opacity: 1; transform: translateX(0); max-height: 80px; margin-bottom: 16px; }
+      to { opacity: 0; transform: translateX(-60px); max-height: 0; margin-bottom: 0; padding: 0; overflow: hidden; }
+    }
+
+    /* Quantity bump animation */
+    @keyframes qtyBumpUp {
+      0% { transform: translateY(0); opacity: 1; }
+      40% { transform: translateY(-14px); opacity: 0; }
+      41% { transform: translateY(14px); opacity: 0; }
+      100% { transform: translateY(0); opacity: 1; }
+    }
+    @keyframes qtyBumpDown {
+      0% { transform: translateY(0); opacity: 1; }
+      40% { transform: translateY(14px); opacity: 0; }
+      41% { transform: translateY(-14px); opacity: 0; }
+      100% { transform: translateY(0); opacity: 1; }
+    }
+    .qty-bump-up {
+      animation: qtyBumpUp 0.3s ease-out;
+    }
+    .qty-bump-down {
+      animation: qtyBumpDown 0.3s ease-out;
+    }
+
+    /* Add-to-cart button pop */
+    @keyframes addPop {
+      0% { transform: scale(1); }
+      50% { transform: scale(0.9); }
+      100% { transform: scale(1); }
+    }
+    .add-pop {
+      animation: addPop 0.25s ease-out;
+    }
+
+    /* Cart count badge bounce */
+    @keyframes badgeBounce {
+      0% { transform: scale(1); }
+      40% { transform: scale(1.5); }
+      100% { transform: scale(1); }
+    }
+    .badge-bounce {
+      animation: badgeBounce 0.35s ease-out;
+    }
+
+    /* Hero content entrance */
+    @keyframes heroFadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .hero-animate > * {
+      opacity: 0;
+      animation: heroFadeUp 0.7s ease-out forwards;
+    }
+    .hero-animate > *:nth-child(1) { animation-delay: 0.1s; }
+    .hero-animate > *:nth-child(2) { animation-delay: 0.25s; }
+    .hero-animate > *:nth-child(3) { animation-delay: 0.4s; }
+    .hero-animate > *:nth-child(4) { animation-delay: 0.55s; }
+
     @media (prefers-reduced-motion: reduce) {
       .product-card { transition: none; }
       .cart-sidebar { transition: none; }
       .modal-overlay { transition: none; }
+      .reveal, .reveal-left, .reveal-right, .reveal-scale { opacity: 1; transform: none; transition: none; }
+      .cart-item-enter { animation: none; }
+      .qty-bump-up, .qty-bump-down { animation: none; }
+      .hero-animate > * { opacity: 1; animation: none; }
+      .badge-bounce { animation: none; }
     }
   </style>
 </head>
@@ -111,15 +233,16 @@
   </nav>
 
   <!-- ===== HERO ===== -->
-  <section class="bg-brand-black pt-28 sm:pt-32 pb-16 sm:pb-24 border-b border-brand-border">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center max-w-3xl mx-auto">
+  <section class="relative overflow-hidden bg-brand-black pt-28 sm:pt-32 pb-16 sm:pb-24 border-b border-brand-border">
+    <canvas id="fireworks-canvas" class="absolute inset-0 w-full h-full pointer-events-none"></canvas>
+    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-3xl mx-auto hero-animate">
         <div class="inline-flex items-center gap-2 border border-brand-red px-4 py-1.5 mb-6">
           <svg class="w-4 h-4 text-brand-red" fill="currentColor" viewBox="0 0 24 24"><path d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z"/></svg>
           <span class="text-sm font-semibold text-brand-red tracking-wide font-body">Wholesale Priced Everyday!</span>
         </div>
         <h1 class="font-display text-6xl sm:text-7xl md:text-8xl lg:text-9xl text-white leading-[0.9] mb-6 tracking-wider">
-          DEAN-O'S<br>FIREWORKS
+          DEAN-<span class="inline-block relative" style="width:0.78em;height:0.78em;vertical-align:baseline;"><svg viewBox="0 0 140 140" class="absolute inset-0 w-full h-full" style="overflow:visible;" aria-label="O"><defs><linearGradient id="o-grad" x1="20%" y1="100%" x2="80%" y2="0%"><stop offset="0%" stop-color="#B91C1C"/><stop offset="40%" stop-color="#DC2626"/><stop offset="70%" stop-color="#F97316"/><stop offset="100%" stop-color="#FBBF24"/></linearGradient><linearGradient id="rk" x1="0%" y1="100%" x2="100%" y2="0%"><stop offset="0%" stop-color="#F97316"/><stop offset="100%" stop-color="#FCD34D"/></linearGradient></defs><circle cx="70" cy="70" r="56" fill="none" stroke="url(#o-grad)" stroke-width="15"/><path d="M100 32 L122 4" stroke="url(#rk)" stroke-width="5" stroke-linecap="round" fill="none"/><path d="M108 44 L132 22" stroke="url(#rk)" stroke-width="4.5" stroke-linecap="round" fill="none"/><path d="M90 24 L108 -4" stroke="url(#rk)" stroke-width="4" stroke-linecap="round" fill="none"/><polygon points="120,2 126,10 118,8" fill="#FCD34D" opacity="0.9"/><polygon points="134,20 138,28 130,26" fill="#FCD34D" opacity="0.85"/><polygon points="106,-6 112,2 104,0" fill="#FCD34D" opacity="0.8"/></svg></span>'S<br>FIREWORKS
         </h1>
         <p class="text-lg sm:text-xl text-brand-muted max-w-xl mx-auto mb-8 leading-relaxed font-body">
           Browse our full inventory of premium fireworks. Add to your cart, submit your order, and pick up in person.
@@ -143,7 +266,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
       <!-- Category filters -->
-      <div class="mb-8">
+      <div class="mb-8 reveal">
         <div class="flex items-center justify-between mb-4">
           <h2 class="font-display text-3xl sm:text-4xl tracking-wider">OUR INVENTORY</h2>
           <div class="flex items-center gap-3">
@@ -165,7 +288,7 @@
       <p id="product-count" class="text-sm text-brand-muted mb-6 font-body"></p>
 
       <!-- Product grid -->
-      <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
+      <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 stagger-children">
       </div>
 
       <!-- Empty state -->
@@ -294,7 +417,7 @@
   <!-- ===== FOOTER ===== -->
   <footer class="border-t border-brand-border mt-16 py-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex flex-col sm:flex-row items-center justify-between gap-6">
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-6 reveal">
         <div class="flex items-center">
           <img src="images/logo.png" alt="Dean-O's Fireworks" class="h-10 w-auto">
         </div>
@@ -503,6 +626,9 @@
       empty.classList.add("hidden");
       count.textContent = `Showing ${products.length} product${products.length !== 1 ? "s" : ""}`;
 
+      var previousCartSnapshot = {};
+      cart.forEach(c => { previousCartSnapshot[c.id] = c.qty; });
+
       grid.innerHTML = products.map(p => {
         const inCart = cart.find(c => c.id === p.id);
         const colorClass = getCategoryColor(p.category);
@@ -513,7 +639,7 @@
         const safeId = escapeHTML(p.id);
         const safePrice = Number(p.price).toFixed(2);
         return `
-          <div class="product-card bg-brand-card border border-brand-border overflow-hidden flex flex-col">
+          <div class="product-card bg-brand-card border border-brand-border overflow-hidden flex flex-col reveal
             <div class="relative ${colorClass} h-44 flex items-center justify-center p-2">
               <img src="images/products/${safeId}.png" alt="${safeName}" class="max-h-full max-w-full object-contain" loading="lazy">
               ${!p.inStock ? '<div class="absolute inset-0 bg-black/70 flex items-center justify-center"><span class="bg-brand-red text-white text-sm font-bold px-4 py-1.5 font-body">Out of Stock</span></div>' : ''}
@@ -530,7 +656,7 @@
                 ${p.inStock ? (inCart
                   ? `<div class="flex items-center gap-1">
                       <button onclick="updateCartQty('${safeId}', -1)" class="w-8 h-8 flex items-center justify-center bg-brand-surface border border-brand-border hover:border-brand-red transition-colors cursor-pointer" aria-label="Decrease quantity"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4"/></svg></button>
-                      <span class="w-8 text-center font-semibold text-sm font-body">${inCart.qty}</span>
+                      <span class="w-8 text-center font-semibold text-sm font-body overflow-hidden" style="height:20px;line-height:20px;"><span class="inline-block qty-display" data-qty-id="${safeId}">${inCart.qty}</span></span>
                       <button onclick="updateCartQty('${safeId}', 1)" class="w-8 h-8 flex items-center justify-center bg-brand-surface border border-brand-border hover:border-brand-red transition-colors cursor-pointer" aria-label="Increase quantity"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg></button>
                     </div>`
                   : `<button onclick="addToCart('${safeId}')" class="btn-primary text-white text-sm font-semibold px-4 py-2 cursor-pointer flex items-center gap-1.5 font-body">
@@ -542,6 +668,23 @@
             </div>
           </div>`;
       }).join("");
+
+      observeRevealElements();
+
+      requestAnimationFrame(() => {
+        document.querySelectorAll('.qty-display').forEach(el => {
+          var id = el.dataset.qtyId;
+          var dir = _lastQtyDirection[id];
+          if (dir) {
+            el.classList.add(dir > 0 ? 'qty-bump-up' : 'qty-bump-down');
+            el.addEventListener('animationend', function handler() {
+              el.classList.remove('qty-bump-up', 'qty-bump-down');
+              el.removeEventListener('animationend', handler);
+            });
+          }
+        });
+        _lastQtyDirection = {};
+      });
     }
 
     // ===== CART =====
@@ -549,6 +692,8 @@
       localStorage.setItem("fw_cart", JSON.stringify(cart));
       updateCartUI();
     }
+
+    var _lastQtyDirection = {};
 
     function addToCart(id) {
       const product = allProducts.find(p => p.id === id);
@@ -559,19 +704,30 @@
       } else {
         cart.push({ id: product.id, name: product.name, price: product.price, qty: 1 });
       }
+      _lastQtyDirection[id] = 1;
       saveCart();
       applyFilters();
+      animateCartBadge();
     }
 
     function updateCartQty(id, delta) {
       const item = cart.find(c => c.id === id);
       if (!item) return;
+      _lastQtyDirection[id] = delta;
       item.qty += delta;
       if (item.qty <= 0) {
         cart = cart.filter(c => c.id !== id);
       }
       saveCart();
       applyFilters();
+      animateCartBadge();
+    }
+
+    function animateCartBadge() {
+      const badge = document.getElementById("cart-count");
+      badge.classList.remove("badge-bounce");
+      void badge.offsetWidth;
+      badge.classList.add("badge-bounce");
     }
 
     function removeFromCart(id) {
@@ -621,7 +777,7 @@
         const safePrice = Number(item.price).toFixed(2);
         const colorClass = getCategoryColor(allProducts.find(p=>p.id===item.id)?.category||'');
         return `
-        <div class="flex items-center gap-3 bg-brand-black p-3 border border-brand-border">
+        <div class="flex items-center gap-3 bg-brand-black p-3 border border-brand-border cart-item-enter" data-cart-item-id="${safeId}">
           <div class="w-14 h-14 ${colorClass} flex items-center justify-center flex-shrink-0">
             <svg class="w-6 h-6 text-white/40" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z"/></svg>
           </div>
@@ -633,7 +789,7 @@
             <button onclick="updateCartQty('${safeId}', -1)" class="w-7 h-7 flex items-center justify-center bg-brand-surface border border-brand-border hover:border-brand-red cursor-pointer" aria-label="Decrease quantity">
               <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4"/></svg>
             </button>
-            <span class="w-6 text-center text-sm font-semibold font-body">${item.qty}</span>
+            <span class="w-6 text-center text-sm font-semibold font-body overflow-hidden" style="height:20px;line-height:20px;"><span class="inline-block cart-qty-display" data-cart-qty-id="${safeId}">${item.qty}</span></span>
             <button onclick="updateCartQty('${safeId}', 1)" class="w-7 h-7 flex items-center justify-center bg-brand-surface border border-brand-border hover:border-brand-red cursor-pointer" aria-label="Increase quantity">
               <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
             </button>
@@ -643,6 +799,20 @@
           </button>
         </div>`;
       }).join("");
+
+      requestAnimationFrame(() => {
+        document.querySelectorAll('.cart-qty-display').forEach(el => {
+          var id = el.dataset.cartQtyId;
+          var dir = _lastQtyDirection[id];
+          if (dir) {
+            el.classList.add(dir > 0 ? 'qty-bump-up' : 'qty-bump-down');
+            el.addEventListener('animationend', function handler() {
+              el.classList.remove('qty-bump-up', 'qty-bump-down');
+              el.removeEventListener('animationend', handler);
+            });
+          }
+        });
+      });
     }
 
     // ===== CART TOGGLE =====
@@ -767,6 +937,132 @@
     function scrollToTop() {
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
+
+    // ===== SCROLL REVEAL (IntersectionObserver) =====
+    var revealObserver = null;
+    function observeRevealElements() {
+      if (!('IntersectionObserver' in window)) {
+        document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale').forEach(function(el) {
+          el.classList.add('visible');
+        });
+        return;
+      }
+      if (!revealObserver) {
+        revealObserver = new IntersectionObserver(function(entries) {
+          entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+              revealObserver.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+      }
+      document.querySelectorAll('.reveal:not(.visible), .reveal-left:not(.visible), .reveal-right:not(.visible), .reveal-scale:not(.visible)').forEach(function(el) {
+        revealObserver.observe(el);
+      });
+    }
+    document.addEventListener('DOMContentLoaded', observeRevealElements);
+
+    // Fireworks canvas animation
+    (function() {
+      var canvas = document.getElementById('fireworks-canvas');
+      if (!canvas) return;
+      var ctx = canvas.getContext('2d');
+      var fireworks = [];
+      var lastFireworkTime = Date.now();
+      var animFrameId = 0;
+      var colors = ['#DC2626', '#F59E0B', '#EF4444', '#F97316', '#FBBF24', '#FCA5A5', '#FDE68A'];
+
+      function sizeCanvas() {
+        var section = canvas.parentElement;
+        canvas.width = section.offsetWidth;
+        canvas.height = section.offsetHeight;
+      }
+      sizeCanvas();
+      window.addEventListener('resize', sizeCanvas);
+
+      function createFirework() {
+        var startX = Math.random() * canvas.width;
+        var color = colors[Math.floor(Math.random() * colors.length)];
+        var angle = (Math.random() * Math.PI) / 2 - Math.PI / 4;
+        var vel = 6 + Math.random() * 4;
+        var targetY = canvas.height * (0.1 + Math.random() * 0.4);
+        fireworks.push({
+          x: startX, y: canvas.height, color: color,
+          vx: Math.sin(angle) * vel, vy: -Math.cos(angle) * vel * 1.5,
+          particles: [], exploded: false, targetY: targetY
+        });
+      }
+
+      function explode(fw) {
+        var count = 60 + Math.floor(Math.random() * 40);
+        for (var i = 0; i < count; i++) {
+          var a = Math.random() * Math.PI * 2;
+          var v = Math.random() * 5 + 1;
+          fw.particles.push({
+            x: fw.x, y: fw.y, color: fw.color,
+            vx: Math.cos(a) * v * (0.5 + Math.random()),
+            vy: Math.sin(a) * v * (0.5 + Math.random()),
+            alpha: 1, lifetime: Math.random() * 30 + 30,
+            size: Math.random() * 3 + 1
+          });
+        }
+      }
+
+      function loop() {
+        ctx.fillStyle = 'rgba(10, 10, 10, 0.15)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        for (var i = 0; i < fireworks.length; i++) {
+          var fw = fireworks[i];
+          if (!fw.exploded) {
+            fw.x += fw.vx;
+            fw.y += fw.vy;
+            fw.vy += 0.1;
+            ctx.beginPath();
+            ctx.arc(fw.x, fw.y, 3, 0, Math.PI * 2);
+            ctx.fillStyle = fw.color;
+            ctx.fill();
+            if (fw.y <= fw.targetY || fw.vy >= 0 || fw.x < 0 || fw.x > canvas.width) {
+              if (fw.y > 0 && fw.y < canvas.height) explode(fw);
+              fw.exploded = true;
+            }
+          } else {
+            for (var j = 0; j < fw.particles.length; j++) {
+              var p = fw.particles[j];
+              p.x += p.vx;
+              p.y += p.vy;
+              p.vy += 0.05;
+              p.alpha -= 1 / p.lifetime;
+              if (p.alpha <= 0.1) { fw.particles.splice(j, 1); j--; continue; }
+              ctx.globalAlpha = p.alpha;
+              ctx.beginPath();
+              ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+              ctx.fillStyle = p.color;
+              ctx.fill();
+              ctx.globalAlpha = 1;
+            }
+            if (fw.particles.length === 0) { fireworks.splice(i, 1); i--; }
+          }
+        }
+
+        var now = Date.now();
+        if (now - lastFireworkTime > 1000 + Math.random() * 2000) {
+          var n = Math.floor(Math.random() * 2) + 1;
+          for (var k = 0; k < n; k++) createFirework();
+          lastFireworkTime = now;
+        }
+        animFrameId = requestAnimationFrame(loop);
+      }
+
+      for (var i = 0; i < 3; i++) createFirework();
+      animFrameId = requestAnimationFrame(loop);
+
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        cancelAnimationFrame(animFrameId);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+    })();
   </script>
 </body>
 </html>
