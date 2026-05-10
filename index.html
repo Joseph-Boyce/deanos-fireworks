@@ -626,9 +626,6 @@
       empty.classList.add("hidden");
       count.textContent = `Showing ${products.length} product${products.length !== 1 ? "s" : ""}`;
 
-      var previousCartSnapshot = {};
-      cart.forEach(c => { previousCartSnapshot[c.id] = c.qty; });
-
       grid.innerHTML = products.map(p => {
         const inCart = cart.find(c => c.id === p.id);
         const colorClass = getCategoryColor(p.category);
@@ -639,7 +636,7 @@
         const safeId = escapeHTML(p.id);
         const safePrice = Number(p.price).toFixed(2);
         return `
-          <div class="product-card bg-brand-card border border-brand-border overflow-hidden flex flex-col reveal
+          <div class="product-card bg-brand-card border border-brand-border overflow-hidden flex flex-col reveal" data-product-id="${safeId}">
             <div class="relative ${colorClass} h-44 flex items-center justify-center p-2">
               <img src="images/products/${safeId}.png" alt="${safeName}" class="max-h-full max-w-full object-contain" loading="lazy">
               ${!p.inStock ? '<div class="absolute inset-0 bg-black/70 flex items-center justify-center"><span class="bg-brand-red text-white text-sm font-bold px-4 py-1.5 font-body">Out of Stock</span></div>' : ''}
@@ -653,7 +650,7 @@
               </div>
               <div class="mt-auto flex items-center justify-between">
                 <span class="font-display text-2xl text-brand-amber">$${safePrice}</span>
-                ${p.inStock ? (inCart
+                ${p.inStock ? `<span class="cart-controls">${inCart
                   ? `<div class="flex items-center gap-1">
                       <button onclick="updateCartQty('${safeId}', -1)" class="w-8 h-8 flex items-center justify-center bg-brand-surface border border-brand-border hover:border-brand-red transition-colors cursor-pointer" aria-label="Decrease quantity"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4"/></svg></button>
                       <span class="w-8 text-center font-semibold text-sm font-body overflow-hidden" style="height:20px;line-height:20px;"><span class="inline-block qty-display" data-qty-id="${safeId}">${inCart.qty}</span></span>
@@ -662,7 +659,7 @@
                   : `<button onclick="addToCart('${safeId}')" class="btn-primary text-white text-sm font-semibold px-4 py-2 cursor-pointer flex items-center gap-1.5 font-body">
                       <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
                       Add
-                    </button>`)
+                    </button>`}</span>`
                 : '<span class="text-brand-red text-sm font-semibold font-body">Unavailable</span>'}
               </div>
             </div>
@@ -670,21 +667,6 @@
       }).join("");
 
       observeRevealElements();
-
-      requestAnimationFrame(() => {
-        document.querySelectorAll('.qty-display').forEach(el => {
-          var id = el.dataset.qtyId;
-          var dir = _lastQtyDirection[id];
-          if (dir) {
-            el.classList.add(dir > 0 ? 'qty-bump-up' : 'qty-bump-down');
-            el.addEventListener('animationend', function handler() {
-              el.classList.remove('qty-bump-up', 'qty-bump-down');
-              el.removeEventListener('animationend', handler);
-            });
-          }
-        });
-        _lastQtyDirection = {};
-      });
     }
 
     // ===== CART =====
@@ -706,7 +688,7 @@
       }
       _lastQtyDirection[id] = 1;
       saveCart();
-      applyFilters();
+      updateProductCardControls(id);
       animateCartBadge();
     }
 
@@ -719,8 +701,40 @@
         cart = cart.filter(c => c.id !== id);
       }
       saveCart();
-      applyFilters();
+      updateProductCardControls(id);
       animateCartBadge();
+    }
+
+    function updateProductCardControls(id) {
+      const safeId = escapeHTML(id);
+      const card = document.querySelector(`[data-product-id="${safeId}"]`);
+      if (!card) return;
+      const controlsEl = card.querySelector('.cart-controls');
+      if (!controlsEl) return;
+      const inCart = cart.find(c => c.id === id);
+      if (inCart) {
+        controlsEl.innerHTML = `<div class="flex items-center gap-1">
+          <button onclick="updateCartQty('${safeId}', -1)" class="w-8 h-8 flex items-center justify-center bg-brand-surface border border-brand-border hover:border-brand-red transition-colors cursor-pointer" aria-label="Decrease quantity"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4"/></svg></button>
+          <span class="w-8 text-center font-semibold text-sm font-body overflow-hidden" style="height:20px;line-height:20px;"><span class="inline-block qty-display" data-qty-id="${safeId}">${inCart.qty}</span></span>
+          <button onclick="updateCartQty('${safeId}', 1)" class="w-8 h-8 flex items-center justify-center bg-brand-surface border border-brand-border hover:border-brand-red transition-colors cursor-pointer" aria-label="Increase quantity"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg></button>
+        </div>`;
+        requestAnimationFrame(() => {
+          const el = controlsEl.querySelector('.qty-display');
+          if (el && _lastQtyDirection[id]) {
+            el.classList.add(_lastQtyDirection[id] > 0 ? 'qty-bump-up' : 'qty-bump-down');
+            el.addEventListener('animationend', function handler() {
+              el.classList.remove('qty-bump-up', 'qty-bump-down');
+              el.removeEventListener('animationend', handler);
+            });
+          }
+          _lastQtyDirection = {};
+        });
+      } else {
+        controlsEl.innerHTML = `<button onclick="addToCart('${safeId}')" class="btn-primary text-white text-sm font-semibold px-4 py-2 cursor-pointer flex items-center gap-1.5 font-body">
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+          Add
+        </button>`;
+      }
     }
 
     function animateCartBadge() {
@@ -733,7 +747,7 @@
     function removeFromCart(id) {
       cart = cart.filter(c => c.id !== id);
       saveCart();
-      applyFilters();
+      updateProductCardControls(id);
     }
 
     function clearCart() {
