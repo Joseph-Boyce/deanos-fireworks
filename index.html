@@ -215,18 +215,21 @@
           </div>
         </div>
 
-        <!-- Cart button -->
+        <!-- Search + Cart buttons -->
         <div class="flex items-center gap-2 sm:gap-4">
+          <button id="mobile-search-toggle" class="md:hidden relative flex items-center bg-brand-surface border border-brand-border px-2.5 py-2.5 hover:border-brand-red transition-colors cursor-pointer" aria-label="Search" onclick="toggleMobileSearch()">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+          </button>
           <button id="cart-toggle" class="relative flex items-center gap-2 bg-brand-surface border border-brand-border px-3 py-2.5 hover:border-brand-red transition-colors cursor-pointer" aria-label="Open shopping cart">
             <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z"/></svg>
             <span id="cart-count" class="absolute -top-2 -right-2 bg-brand-red text-white text-xs font-bold w-5 h-5 flex items-center justify-center hidden">0</span>
           </button>
         </div>
       </div>
-      <!-- Mobile search -->
-      <div class="md:hidden pb-3">
-        <div class="relative">
-          <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-brand-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+      <!-- Mobile search (toggleable) -->
+      <div id="mobile-search-bar" class="md:hidden overflow-hidden transition-all duration-200 max-h-0">
+        <div class="relative pb-3">
+          <svg class="absolute left-3 top-1/2 -translate-y-1/2 -mt-1.5 w-5 h-5 text-brand-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
           <input id="search-mobile" type="text" placeholder="Search fireworks..." class="w-full pl-10 pr-4 py-2.5 bg-brand-surface border border-brand-border text-white placeholder-brand-muted text-sm cursor-text">
         </div>
       </div>
@@ -952,6 +955,17 @@
         closeConfirmation();
       }
     });
+
+    function toggleMobileSearch() {
+      var bar = document.getElementById("mobile-search-bar");
+      var input = document.getElementById("search-mobile");
+      if (bar.style.maxHeight && bar.style.maxHeight !== "0px") {
+        bar.style.maxHeight = "0px";
+      } else {
+        bar.style.maxHeight = "60px";
+        input.focus();
+      }
+    }
 
     function scrollToTop() {
       window.scrollTo({ top: 0, behavior: "smooth" });
