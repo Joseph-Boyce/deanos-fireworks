@@ -39,6 +39,7 @@
     h1, h2, h3, h4, h5, h6 { font-family: 'Bebas Neue', sans-serif; letter-spacing: 0.02em; }
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
     .cart-sidebar { transform: translateX(100%); transition: transform 200ms ease-out; }
     .cart-sidebar.open { transform: translateX(0); }
     .modal-overlay { opacity: 0; pointer-events: none; transition: opacity 150ms ease; }
@@ -233,7 +234,7 @@
   </nav>
 
   <!-- ===== HERO ===== -->
-  <section class="relative overflow-hidden bg-brand-black pt-28 sm:pt-32 pb-16 sm:pb-24 border-b border-brand-border">
+  <section class="relative overflow-hidden bg-brand-black pt-24 sm:pt-32 pb-10 sm:pb-24 border-b border-brand-border">
     <canvas id="fireworks-canvas" class="absolute inset-0 w-full h-full pointer-events-none"></canvas>
     <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center max-w-3xl mx-auto hero-animate">
@@ -241,10 +242,10 @@
           <svg class="w-4 h-4 text-brand-red" fill="currentColor" viewBox="0 0 24 24"><path d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z"/></svg>
           <span class="text-sm font-semibold text-brand-red tracking-wide font-body">Wholesale Priced Everyday!</span>
         </div>
-        <h1 class="font-display text-6xl sm:text-7xl md:text-8xl lg:text-9xl text-white leading-[0.9] mb-6 tracking-wider">
+        <h1 class="font-display text-5xl sm:text-7xl md:text-8xl lg:text-9xl text-white leading-[0.9] mb-4 sm:mb-6 tracking-wider">
           DEAN-<span class="inline-block relative" style="width:0.78em;height:0.78em;vertical-align:baseline;"><svg viewBox="0 0 140 140" class="absolute inset-0 w-full h-full" style="overflow:visible;" aria-label="O"><defs><linearGradient id="o-grad" x1="20%" y1="100%" x2="80%" y2="0%"><stop offset="0%" stop-color="#B91C1C"/><stop offset="40%" stop-color="#DC2626"/><stop offset="70%" stop-color="#F97316"/><stop offset="100%" stop-color="#FBBF24"/></linearGradient><linearGradient id="rk" x1="0%" y1="100%" x2="100%" y2="0%"><stop offset="0%" stop-color="#F97316"/><stop offset="100%" stop-color="#FCD34D"/></linearGradient></defs><circle cx="70" cy="70" r="56" fill="none" stroke="url(#o-grad)" stroke-width="15"/><path d="M100 32 L122 4" stroke="url(#rk)" stroke-width="5" stroke-linecap="round" fill="none"/><path d="M108 44 L132 22" stroke="url(#rk)" stroke-width="4.5" stroke-linecap="round" fill="none"/><path d="M90 24 L108 -4" stroke="url(#rk)" stroke-width="4" stroke-linecap="round" fill="none"/><polygon points="120,2 126,10 118,8" fill="#FCD34D" opacity="0.9"/><polygon points="134,20 138,28 130,26" fill="#FCD34D" opacity="0.85"/><polygon points="106,-6 112,2 104,0" fill="#FCD34D" opacity="0.8"/></svg></span>'S<br>FIREWORKS
         </h1>
-        <p class="text-lg sm:text-xl text-brand-muted max-w-xl mx-auto mb-8 leading-relaxed font-body">
+        <p class="text-base sm:text-xl text-brand-muted max-w-xl mx-auto mb-6 sm:mb-8 leading-relaxed font-body px-2 sm:px-0">
           Browse our full inventory of premium fireworks. Add to your cart, submit your order, and pick up in person.
         </p>
         <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -262,7 +263,7 @@
   </section>
 
   <!-- ===== CATALOG ===== -->
-  <section id="catalog" class="py-12 sm:py-16">
+  <section id="catalog" class="py-8 sm:py-16">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
       <!-- Category filters -->
@@ -279,8 +280,8 @@
             </select>
           </div>
         </div>
-        <div class="flex gap-2 overflow-x-auto no-scrollbar pb-2">
-          <button class="category-btn active whitespace-nowrap px-4 py-2 border border-brand-border text-sm font-semibold cursor-pointer transition-colors hover:border-brand-red font-body" data-category="All">All</button>
+        <div class="flex flex-wrap gap-2 pb-2">
+          <button class="category-btn active px-3 py-1.5 border border-brand-border text-xs sm:text-sm font-semibold cursor-pointer transition-colors hover:border-brand-red font-body" data-category="All">All</button>
         </div>
       </div>
 
@@ -288,7 +289,7 @@
       <p id="product-count" class="text-sm text-brand-muted mb-6 font-body"></p>
 
       <!-- Product grid -->
-      <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 stagger-children">
+      <div id="product-grid" class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2.5 sm:gap-6 stagger-children">
       </div>
 
       <!-- Empty state -->
@@ -519,11 +520,11 @@
     function renderCategories() {
       const container = document.querySelector(".category-btn").parentElement;
       const cats = [...new Set(allProducts.map(p => p.category))];
-      container.innerHTML = `<button class="category-btn active whitespace-nowrap px-4 py-2 border border-brand-border text-sm font-semibold cursor-pointer transition-colors hover:border-brand-red font-body" data-category="All" onclick="selectCategory('All')">All (${allProducts.length})</button>`;
+      container.innerHTML = `<button class="category-btn active px-3 py-1.5 border border-brand-border text-xs sm:text-sm font-semibold cursor-pointer transition-colors hover:border-brand-red font-body" data-category="All" onclick="selectCategory('All')">All (${allProducts.length})</button>`;
       cats.forEach(cat => {
         const safeCat = escapeHTML(cat);
         const count = allProducts.filter(p => p.category === cat).length;
-        container.innerHTML += `<button class="category-btn whitespace-nowrap px-4 py-2 border border-brand-border text-sm font-semibold cursor-pointer transition-colors hover:border-brand-red text-brand-muted font-body" data-category="${safeCat}" onclick="selectCategory('${safeCat}')">${safeCat} (${count})</button>`;
+        container.innerHTML += `<button class="category-btn px-3 py-1.5 border border-brand-border text-xs sm:text-sm font-semibold cursor-pointer transition-colors hover:border-brand-red text-brand-muted font-body" data-category="${safeCat}" onclick="selectCategory('${safeCat}')">${safeCat} (${count})</button>`;
       });
     }
 
@@ -637,27 +638,27 @@
         const safePrice = Number(p.price).toFixed(2);
         return `
           <div class="product-card bg-brand-card border border-brand-border overflow-hidden flex flex-col reveal" data-product-id="${safeId}">
-            <div class="relative ${colorClass} h-44 flex items-center justify-center p-2">
+            <div class="relative ${colorClass} h-28 sm:h-44 flex items-center justify-center p-1.5 sm:p-2">
               <img src="images/products/${safeId}.png" alt="${safeName}" class="max-h-full max-w-full object-contain" loading="lazy">
-              ${!p.inStock ? '<div class="absolute inset-0 bg-black/70 flex items-center justify-center"><span class="bg-brand-red text-white text-sm font-bold px-4 py-1.5 font-body">Out of Stock</span></div>' : ''}
-              ${p.price >= 100 ? '<div class="absolute top-3 right-3 bg-brand-amber text-brand-black text-xs font-bold px-2 py-1 font-body">PREMIUM</div>' : ''}
+              ${!p.inStock ? '<div class="absolute inset-0 bg-black/70 flex items-center justify-center"><span class="bg-brand-red text-white text-xs sm:text-sm font-bold px-2 sm:px-4 py-1 sm:py-1.5 font-body">Out of Stock</span></div>' : ''}
+              ${p.price >= 100 ? '<div class="absolute top-1.5 right-1.5 sm:top-3 sm:right-3 bg-brand-amber text-brand-black text-[10px] sm:text-xs font-bold px-1.5 py-0.5 sm:px-2 sm:py-1 font-body">PREMIUM</div>' : ''}
             </div>
-            <div class="p-4 flex-1 flex flex-col">
-              <h3 class="font-display text-lg leading-tight mb-1 tracking-wide">${safeName}</h3>
-              ${safeDesc ? `<p class="text-brand-muted text-xs mb-2 font-body">${safeDesc}</p>` : ''}
-              <div class="flex items-center gap-3 text-xs text-brand-muted mb-3 font-body">
-                ${safeDuration !== "N/A" && safeDuration ? `<span class="flex items-center gap-1"><svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>${safeDuration}</span>` : ''}
+            <div class="p-2.5 sm:p-4 flex-1 flex flex-col">
+              <h3 class="font-display text-sm sm:text-lg leading-tight mb-1 tracking-wide line-clamp-2">${safeName}</h3>
+              ${safeDesc ? `<p class="text-brand-muted text-[10px] sm:text-xs mb-1 sm:mb-2 font-body hidden sm:block">${safeDesc}</p>` : ''}
+              <div class="flex items-center gap-3 text-[10px] sm:text-xs text-brand-muted mb-1.5 sm:mb-3 font-body">
+                ${safeDuration !== "N/A" && safeDuration ? `<span class="flex items-center gap-1"><svg class="w-3 h-3 sm:w-3.5 sm:h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>${safeDuration}</span>` : ''}
               </div>
-              <div class="mt-auto flex items-center justify-between">
-                <span class="font-display text-2xl text-brand-amber">$${safePrice}</span>
+              <div class="mt-auto flex items-center justify-between gap-1">
+                <span class="font-display text-lg sm:text-2xl text-brand-amber">$${safePrice}</span>
                 ${p.inStock ? `<span class="cart-controls">${inCart
-                  ? `<div class="flex items-center gap-1">
-                      <button onclick="updateCartQty('${safeId}', -1)" class="w-8 h-8 flex items-center justify-center bg-brand-surface border border-brand-border hover:border-brand-red transition-colors cursor-pointer" aria-label="Decrease quantity"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4"/></svg></button>
-                      <span class="w-8 text-center font-semibold text-sm font-body overflow-hidden" style="height:20px;line-height:20px;"><span class="inline-block qty-display" data-qty-id="${safeId}">${inCart.qty}</span></span>
-                      <button onclick="updateCartQty('${safeId}', 1)" class="w-8 h-8 flex items-center justify-center bg-brand-surface border border-brand-border hover:border-brand-red transition-colors cursor-pointer" aria-label="Increase quantity"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg></button>
+                  ? `<div class="flex items-center gap-0.5 sm:gap-1">
+                      <button onclick="updateCartQty('${safeId}', -1)" class="w-6 h-6 sm:w-8 sm:h-8 flex items-center justify-center bg-brand-surface border border-brand-border hover:border-brand-red transition-colors cursor-pointer" aria-label="Decrease quantity"><svg class="w-3 h-3 sm:w-4 sm:h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4"/></svg></button>
+                      <span class="w-6 sm:w-8 text-center font-semibold text-xs sm:text-sm font-body overflow-hidden" style="height:20px;line-height:20px;"><span class="inline-block qty-display" data-qty-id="${safeId}">${inCart.qty}</span></span>
+                      <button onclick="updateCartQty('${safeId}', 1)" class="w-6 h-6 sm:w-8 sm:h-8 flex items-center justify-center bg-brand-surface border border-brand-border hover:border-brand-red transition-colors cursor-pointer" aria-label="Increase quantity"><svg class="w-3 h-3 sm:w-4 sm:h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg></button>
                     </div>`
-                  : `<button onclick="addToCart('${safeId}')" class="btn-primary text-white text-sm font-semibold px-4 py-2 cursor-pointer flex items-center gap-1.5 font-body">
-                      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+                  : `<button onclick="addToCart('${safeId}')" class="btn-primary text-white text-xs sm:text-sm font-semibold px-2 py-1.5 sm:px-4 sm:py-2 cursor-pointer flex items-center gap-1 sm:gap-1.5 font-body">
+                      <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
                       Add
                     </button>`}</span>`
                 : '<span class="text-brand-red text-sm font-semibold font-body">Unavailable</span>'}
@@ -713,10 +714,10 @@
       if (!controlsEl) return;
       const inCart = cart.find(c => c.id === id);
       if (inCart) {
-        controlsEl.innerHTML = `<div class="flex items-center gap-1">
-          <button onclick="updateCartQty('${safeId}', -1)" class="w-8 h-8 flex items-center justify-center bg-brand-surface border border-brand-border hover:border-brand-red transition-colors cursor-pointer" aria-label="Decrease quantity"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4"/></svg></button>
-          <span class="w-8 text-center font-semibold text-sm font-body overflow-hidden" style="height:20px;line-height:20px;"><span class="inline-block qty-display" data-qty-id="${safeId}">${inCart.qty}</span></span>
-          <button onclick="updateCartQty('${safeId}', 1)" class="w-8 h-8 flex items-center justify-center bg-brand-surface border border-brand-border hover:border-brand-red transition-colors cursor-pointer" aria-label="Increase quantity"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg></button>
+        controlsEl.innerHTML = `<div class="flex items-center gap-0.5 sm:gap-1">
+          <button onclick="updateCartQty('${safeId}', -1)" class="w-6 h-6 sm:w-8 sm:h-8 flex items-center justify-center bg-brand-surface border border-brand-border hover:border-brand-red transition-colors cursor-pointer" aria-label="Decrease quantity"><svg class="w-3 h-3 sm:w-4 sm:h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M20 12H4"/></svg></button>
+          <span class="w-6 sm:w-8 text-center font-semibold text-xs sm:text-sm font-body overflow-hidden" style="height:20px;line-height:20px;"><span class="inline-block qty-display" data-qty-id="${safeId}">${inCart.qty}</span></span>
+          <button onclick="updateCartQty('${safeId}', 1)" class="w-6 h-6 sm:w-8 sm:h-8 flex items-center justify-center bg-brand-surface border border-brand-border hover:border-brand-red transition-colors cursor-pointer" aria-label="Increase quantity"><svg class="w-3 h-3 sm:w-4 sm:h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg></button>
         </div>`;
         requestAnimationFrame(() => {
           const el = controlsEl.querySelector('.qty-display');
@@ -730,8 +731,8 @@
           _lastQtyDirection = {};
         });
       } else {
-        controlsEl.innerHTML = `<button onclick="addToCart('${safeId}')" class="btn-primary text-white text-sm font-semibold px-4 py-2 cursor-pointer flex items-center gap-1.5 font-body">
-          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+        controlsEl.innerHTML = `<button onclick="addToCart('${safeId}')" class="btn-primary text-white text-xs sm:text-sm font-semibold px-2 py-1.5 sm:px-4 sm:py-2 cursor-pointer flex items-center gap-1 sm:gap-1.5 font-body">
+          <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
           Add
         </button>`;
       }
