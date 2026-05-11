@@ -876,12 +876,16 @@
         return;
       }
 
-      // Verify reCAPTCHA if configured
+      // Verify reCAPTCHA if configured and rendered
       if (RECAPTCHA_SITE_KEY !== "YOUR_RECAPTCHA_SITE_KEY") {
-        const recaptchaResponse = grecaptcha.getResponse();
-        if (!recaptchaResponse) {
-          alert("Please complete the CAPTCHA verification.");
-          return;
+        try {
+          const recaptchaResponse = grecaptcha.getResponse();
+          if (!recaptchaResponse) {
+            alert("Please complete the CAPTCHA verification.");
+            return;
+          }
+        } catch (rcErr) {
+          console.warn("reCAPTCHA not available, skipping verification:", rcErr);
         }
       }
 
@@ -926,7 +930,7 @@
         applyFilters();
         form.reset();
         if (RECAPTCHA_SITE_KEY !== "YOUR_RECAPTCHA_SITE_KEY") {
-          grecaptcha.reset();
+          try { grecaptcha.reset(); } catch (e) {}
         }
         closeOrderForm();
         document.getElementById("confirmation-order-id").textContent = "Order ID: " + escapeHTML(orderId);
