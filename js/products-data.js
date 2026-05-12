@@ -1,23 +1,23 @@
 const PRODUCT_CATEGORIES = [
-  "Miscellaneous Fireworks",
-  "200G Cakes",
-  "Hybrid 400G Cakes",
-  "250th America Anniversary Cakes",
-  "Canister Tubes",
-  "500G Cakes",
   "Mortar Shells",
-  "500G Cake Combo Packs"
+  "500G Cake Combo Packs",
+  "500G Cakes",
+  "250th America Anniversary Cakes",
+  "Hybrid 400G Cakes",
+  "200G Cakes",
+  "Canister Tubes",
+  "Firecrackers & Rockets"
 ];
 
 const PRODUCTS = [
-  // === Miscellaneous Fireworks ===
-  { id: "misc-1", name: "Roll of 4,000 Firecrackers", category: "Miscellaneous Fireworks", duration: "N/A", price: 40.00, inStock: true, stockQty: 50, video: "https://vimeo.com/1080617228" },
-  { id: "misc-2", name: "Roll of 8,000 Firecrackers", category: "Miscellaneous Fireworks", duration: "N/A", price: 70.00, inStock: true, stockQty: 50, video: "https://vimeo.com/1080617228" },
-  { id: "misc-3", name: "M-60 Salute Crackers (12 Pack)", category: "Miscellaneous Fireworks", duration: "N/A", price: 5.00, inStock: true, stockQty: 100, video: "https://vimeo.com/345025571" },
-  { id: "misc-4", name: "Freedom Stick - 135 Shots - Hand Held", category: "Miscellaneous Fireworks", duration: "34 Seconds", price: 10.00, inStock: true, stockQty: 75, video: "https://vimeo.com/1079776783" },
-  { id: "misc-5", name: "Starshot Strobe Rocket", category: "Miscellaneous Fireworks", duration: "8 Seconds", price: 15.00, inStock: true, stockQty: 60, video: "https://vimeo.com/1079790335" },
-  { id: "misc-6", name: "Texas Battery - 504 Shot Saturn Missile", category: "Miscellaneous Fireworks", duration: "1 Min 49 Sec", price: 60.00, inStock: true, stockQty: 30, video: "https://vimeo.com/167567117" },
-  { id: "misc-7", name: "Hog Wild Battery - 750 Shot Saturn Missile", category: "Miscellaneous Fireworks", duration: "1 Min 6 Sec", price: 70.00, inStock: true, stockQty: 30, video: "https://vimeo.com/1079790596" },
+  // === Firecrackers & Rockets ===
+  { id: "misc-1", name: "Roll of 4,000 Firecrackers", category: "Firecrackers & Rockets", duration: "N/A", price: 40.00, inStock: true, stockQty: 50, video: "https://vimeo.com/1080617228" },
+  { id: "misc-2", name: "Roll of 8,000 Firecrackers", category: "Firecrackers & Rockets", duration: "N/A", price: 70.00, inStock: true, stockQty: 50, video: "https://vimeo.com/1080617228" },
+  { id: "misc-3", name: "M-60 Salute Crackers (12 Pack)", category: "Firecrackers & Rockets", duration: "N/A", price: 5.00, inStock: true, stockQty: 100, video: "https://vimeo.com/345025571" },
+  { id: "misc-4", name: "Freedom Stick - 135 Shots - Hand Held", category: "Firecrackers & Rockets", duration: "34 Seconds", price: 10.00, inStock: true, stockQty: 75, video: "https://vimeo.com/1079776783" },
+  { id: "misc-5", name: "Starshot Strobe Rocket", category: "Firecrackers & Rockets", duration: "8 Seconds", price: 15.00, inStock: true, stockQty: 60, video: "https://vimeo.com/1079790335" },
+  { id: "misc-6", name: "Texas Battery - 504 Shot Saturn Missile", category: "Firecrackers & Rockets", duration: "1 Min 49 Sec", price: 60.00, inStock: true, stockQty: 30, video: "https://vimeo.com/167567117" },
+  { id: "misc-7", name: "Hog Wild Battery - 750 Shot Saturn Missile", category: "Firecrackers & Rockets", duration: "1 Min 6 Sec", price: 70.00, inStock: true, stockQty: 30, video: "https://vimeo.com/1079790596" },
 
   // === 200G Cakes ===
   { id: "200g-1", name: "Age of Dragons 200g - 16 Shots", description: "Blue, Gold, Green, Purple, Red, Silver", category: "200G Cakes", duration: "28 Seconds", price: 15.00, inStock: true, stockQty: 40, video: "https://vimeo.com/1079776820" },
