@@ -45,11 +45,11 @@ const PRODUCTS = [
   { id: "ann-3", name: "American Attitude - 500g - 36 Shots", category: "250th America Anniversary Cakes", duration: "20 Seconds", price: 40.00, inStock: true, stockQty: 25, video: "https://vimeo.com/1155147703" },
   { id: "ann-4", name: "Liberty Celebration - 500g - 36 Shots", category: "250th America Anniversary Cakes", duration: "27 Seconds", price: 40.00, inStock: true, stockQty: 25, video: "https://vimeo.com/1155148388" },
   { id: "ann-5", name: "50 Star Storm - 500g - 50 Shots", category: "250th America Anniversary Cakes", duration: "36 Seconds", price: 50.00, inStock: true, stockQty: 20, video: "https://vimeo.com/1155149978" },
-  { id: "ann-6", name: "Star Spangled Smackdown - 100 Shots", category: "250th America Anniversary Cakes", duration: "42 Seconds", price: 120.00, inStock: true, stockQty: 15, video: "https://vimeo.com/1155154855" },
-  { id: "ann-7", name: "Revolutionary Roar - 88 Shots", category: "250th America Anniversary Cakes", duration: "47 Seconds", price: 120.00, inStock: true, stockQty: 15, video: "https://vimeo.com/1155155448" },
-  { id: "ann-8", name: "Thunder in the Republic - 120 Shots", category: "250th America Anniversary Cakes", duration: "46 Seconds", price: 120.00, inStock: true, stockQty: 15, video: "https://vimeo.com/1176568430" },
-  { id: "ann-9", name: "Detonation of Independence - 180 Shots", category: "250th America Anniversary Cakes", duration: "53 Seconds", price: 200.00, inStock: true, stockQty: 10, video: "https://vimeo.com/1155162324" },
-  { id: "ann-10", name: "The American Heartbeat - 250 Shots", category: "250th America Anniversary Cakes", duration: "1 Min 48 Sec", price: 250.00, inStock: true, stockQty: 10, video: "https://vimeo.com/1155168438" },
+  { id: "ann-6", name: "Star Spangled Smackdown - 100 Shots", category: "250th America Anniversary Cakes", duration: "42 Seconds", price: 120.00, inStock: true, stockQty: 3, video: "https://vimeo.com/1155154855" },
+  { id: "ann-7", name: "Revolutionary Roar - 88 Shots", category: "250th America Anniversary Cakes", duration: "47 Seconds", price: 120.00, inStock: true, stockQty: 3, video: "https://vimeo.com/1155155448" },
+  { id: "ann-8", name: "Thunder in the Republic - 120 Shots", category: "250th America Anniversary Cakes", duration: "46 Seconds", price: 120.00, inStock: true, stockQty: 3, video: "https://vimeo.com/1176568430" },
+  { id: "ann-9", name: "Detonation of Independence - 180 Shots", category: "250th America Anniversary Cakes", duration: "53 Seconds", price: 200.00, inStock: true, stockQty: 3, video: "https://vimeo.com/1155162324" },
+  { id: "ann-10", name: "The American Heartbeat - 250 Shots", category: "250th America Anniversary Cakes", duration: "1 Min 48 Sec", price: 250.00, inStock: true, stockQty: 3, video: "https://vimeo.com/1155168438" },
 
   // === Canister Tubes ===
   { id: "tube-1", name: "Doomsday Machine 3\" Tubes - 500g - 7 Shot", category: "Canister Tubes", duration: "22 Seconds", price: 90.00, inStock: true, stockQty: 20, video: "https://vimeo.com/333552305" },
