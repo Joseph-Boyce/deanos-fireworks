@@ -552,7 +552,7 @@
   </footer>
 
   <!-- ===== SCRIPTS ===== -->
-  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+  <script src="https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit" async defer></script>
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
   <script src="js/products-data.js"></script>
   <script>
@@ -634,21 +634,22 @@
       }
     });
 
+    let recaptchaRendered = false;
     function renderRecaptcha() {
+      if (recaptchaRendered) return;
       if (typeof grecaptcha !== "undefined" && grecaptcha.render) {
         grecaptcha.render("g-recaptcha", {
           sitekey: RECAPTCHA_SITE_KEY,
           theme: "dark"
         });
-      } else {
-        window.onRecaptchaLoad = () => {
-          grecaptcha.render("g-recaptcha", {
-            sitekey: RECAPTCHA_SITE_KEY,
-            theme: "dark"
-          });
-        };
+        recaptchaRendered = true;
       }
     }
+    window.onRecaptchaLoad = function() {
+      if (RECAPTCHA_SITE_KEY !== "YOUR_RECAPTCHA_SITE_KEY") {
+        renderRecaptcha();
+      }
+    };
 
     // ===== CATEGORY RENDERING =====
     function renderCategories() {
